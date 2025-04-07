@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EduConnect - Comunidad de Aprendizaje</title>
+<style>
+body {
+font-family: Arial, sans-serif;
+margin: 0;
+padding: 0;
+background-color: #f4f4f4;
+}
+
+header {
+background: #0073e6;
+color: white;
+padding: 20px;
+text-align: center;
+}
+
+nav {
+background: #005bb5;
+padding: 10px;
+text-align: center;
+}
+
+nav ul {
+list-style: none;
+padding: 0;
+}
+
+nav ul li {
+display: inline;
+margin: 0 15px;
+}
+
+nav ul li a {
+color: white;
+text-decoration: none;
+font-weight: bold;
+}
+
+section {
+padding: 20px;
+background: white;
+margin: 20px;
+border-radius: 10px;
+}
+
+.materia {
+background: #ddd;
+padding: 10px;
+margin: 10px 0;
+border-radius: 5px;
+}
+
+form {
+display: flex;
+flex-direction: column;
+}
+
+input, textarea, button {
+margin: 10px 0;
+padding: 10px;
+width: 100%;
+}
+
+button {
+background: #0073e6;
+color: white;
+border: none;
+cursor: pointer;
+}
+
+button:hover {
+background: #005bb5;
+}
+
+footer {
+text-align: center;
+padding: 10px;
+background: #333;
+color: white;
+}
+</style>
+</head>
+<body>
+<header>
+<h1>EduConnect</h1>
+<p>Una comunidad educativa para estudiantes de primaria hasta universidad</p>
+</header>
+
+<nav>
+<ul>
+<li><a href="#inicio">Inicio</a></li>
+<li><a href="#materias">Materias</a></li>
+<li><a href="#publicaciones">Publicaciones</a></li>
+<li><a href="#comentarios">Comentarios</a></li>
+</ul>
+</nav>
+
+<section id="inicio">
+<h2>Bienvenidos a EduConnect</h2>
+<p>Un espacio para compartir conocimientos y colaborar en distintas materias.</p>
+</section>
+
+<section id="materias">
+<h2>Materias</h2>
+<div class="materia">
+<h3>Matemáticas</h3>
+<p>Recursos y publicaciones sobre álgebra, cálculo, geometría y más.</p>
+</div>
+<div class="materia">
+<h3>Ciencias</h3>
+<p>Explora temas de biología, química y física.</p>
+</div>
+<div class="materia">
+<h3>Historia</h3>
+<p>Descubre la historia del mundo y sus eventos más importantes.</p>
+</div>
+</section>
+
+<section id="publicaciones">
+<h2>Publica tu contenido</h2>
+<form id="formPublicacion">
+<input type="text" id="titulo" placeholder="Título" required>
+<textarea id="contenido" placeholder="Escribe tu publicación aquí..." required></textarea>
+<button type="submit">Publicar</button>
+</form>
+<div id="listaPublicaciones"></div>
+</section>
+
+<section id="comentarios">
+<h2>Comentarios</h2>
+<form id="formComentario">
+<input type="text" id="nombre" placeholder="Tu nombre" required>
+<textarea id="comentario" placeholder="Escribe tu comentario aquí..." required></textarea>
+<button type="submit">Comentar</button>
+</form>
+<div id="listaComentarios"></div>
+</section>
+
+<footer>
+<p>&copy; 2025 EduConnect - Comunidad de Aprendizaje</p>
+</footer>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+// Publicaciones
+document.getElementById("formPublicacion").addEventListener("submit", function(e) {
+e.preventDefault();
+let titulo = document.getElementById("titulo").value;
+let contenido = document.getElementById("contenido").value;
+
+if (titulo && contenido) {
+let nuevaPublicacion = document.createElement("div");
+nuevaPublicacion.innerHTML = `<h3>${titulo}</h3><p>${contenido}</p><hr>`;
+document.getElementById("listaPublicaciones").appendChild(nuevaPublicacion);
+
+// Limpiar formulario
+document.getElementById("titulo").value = "";
+document.getElementById("contenido").value = "";
+}
+});
+
+// Comentarios
+document.getElementById("formComentario").addEventListener("submit", function(e) {
+e.preventDefault();
+let nombre = document.getElementById("nombre").value;
+let comentario = document.getElementById("comentario").value;
+
+if (nombre && comentario) {
+let nuevoComentario = document.createElement("div");
+nuevoComentario.innerHTML = `<strong>${nombre}:</strong> <p>${comentario}</p><hr>`;
+document.getElementById("listaComentarios").appendChild(nuevoComentario);
+
+// Limpiar formulario
+document.getElementById("nombre").value = "";
+document.getElementById("comentario").value = "";
+}
+});
+});
+</script>
+</body>
+</html>
