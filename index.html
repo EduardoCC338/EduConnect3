@@ -1,238 +1,207 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EduConnect - Comunidad de Aprendizaje</title>
-    <style>
-        <script type="module">
-  // Import the functions you need from the SDKs you need
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/11.8.0/firebase-app.js";
-  import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.8.0/firebase-analytics.js";
-  // TODO: Add SDKs for Firebase products that you want to use
-  // https://firebase.google.com/docs/web/setup#available-libraries
-
-  // Your web app's Firebase configuration
-  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
-  const firebaseConfig = {
-    apiKey: "AIzaSyBBOQ3Juovb9-m8HCLghqF5DlR5LgBMYY0",
-    authDomain: "educonnect-a492f.firebaseapp.com",
-    projectId: "educonnect-a492f",
-    storageBucket: "educonnect-a492f.firebasestorage.app",
-    messagingSenderId: "1086853453106",
-    appId: "1:1086853453106:web:51262a98664e59724fb32b",
-    measurementId: "G-VQQS2PFRXB"
-  };
-
-  // Initialize Firebase
-  const app = initializeApp(firebaseConfig);
-  const analytics = getAnalytics(app);
-</script>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f4f4f4;
-        }
-
-        header {
-            background: #0073e6;
-            color: white;
-            padding: 20px;
-            text-align: center;
-        }
-
-        nav {
-            background: #005bb5;
-            padding: 10px;
-            text-align: center;
-        }
-
-        nav ul {
-            list-style: none;
-            padding: 0;
-        }
-
-        nav ul li {
-            display: inline;
-            margin: 0 15px;
-        }
-
-        nav ul li a {
-            color: white;
-            text-decoration: none;
-            font-weight: bold;
-        }
-
-        section {
-            padding: 20px;
-            background: white;
-            margin: 20px;
-            border-radius: 10px;
-        }
-
-        .materia {
-            background: #ddd;
-            padding: 10px;
-            margin: 10px 0;
-            border-radius: 5px;
-        }
-
-        form {
-            display: flex;
-            flex-direction: column;
-        }
-
-        input, textarea, button {
-            margin: 10px 0;
-            padding: 10px;
-            width: 100%;
-        }
-
-        button {
-            background: #0073e6;
-            color: white;
-            border: none;
-            cursor: pointer;
-        }
-
-        button:hover {
-            background: #005bb5;
-        }
-
-        footer {
-            text-align: center;
-            padding: 10px;
-            background: #333;
-            color: white;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>EduConnect - Comunidad de Aprendizaje</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f4f4f4;
+    }
+    header {
+      background: #0073e6;
+      color: white;
+      padding: 20px;
+      text-align: center;
+    }
+    nav {
+      background: #005bb5;
+      padding: 10px;
+      text-align: center;
+    }
+    nav ul {
+      list-style: none;
+      padding: 0;
+    }
+    nav ul li {
+      display: inline;
+      margin: 0 15px;
+    }
+    nav ul li a {
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+    }
+    section {
+      padding: 20px;
+      background: white;
+      margin: 20px;
+      border-radius: 10px;
+    }
+    .materia {
+      background: #ddd;
+      padding: 10px;
+      margin: 10px 0;
+      border-radius: 5px;
+    }
+    form {
+      display: flex;
+      flex-direction: column;
+    }
+    input, textarea, button {
+      margin: 10px 0;
+      padding: 10px;
+      width: 100%;
+    }
+    button {
+      background: #0073e6;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #005bb5;
+    }
+    footer {
+      text-align: center;
+      padding: 10px;
+      background: #333;
+      color: white;
+    }
+  </style>
 </head>
 <body>
-    <header>
-        <h1>EduConnect</h1>
-        <p>Una comunidad educativa para estudiantes de primaria hasta universidad</p>
-    </header>
+  <header>
+    <h1>EduConnect</h1>
+    <p>Una comunidad educativa para estudiantes de primaria hasta universidad</p>
+  </header>
 
-    <nav>
-        <ul>
-            <li><a href="#inicio">Inicio</a></li>
-            <li><a href="#materias">Materias</a></li>
-            <li><a href="#publicaciones">Publicaciones</a></li>
-            <li><a href="#comentarios">Comentarios</a></li>
-        </ul>
-    </nav>
+  <nav>
+    <ul>
+      <li><a href="#inicio">Inicio</a></li>
+      <li><a href="#materias">Materias</a></li>
+      <li><a href="#publicaciones">Publicaciones</a></li>
+      <li><a href="#comentarios">Comentarios</a></li>
+    </ul>
+  </nav>
 
-    <section id="inicio">
-        <h2>Bienvenidos a EduConnect</h2>
-        <p>Un espacio para compartir conocimientos y colaborar en distintas materias.</p>
-    </section>
+  <section id="inicio">
+    <h2>Bienvenidos a EduConnect</h2>
+    <p>Un espacio para compartir conocimientos y colaborar en distintas materias.</p>
+  </section>
 
-    <section id="materias">
-        <h2>Materias</h2>
-        <div class="materia">
-            <h3>Matemáticas</h3>
-            <p>Recursos y publicaciones sobre álgebra, cálculo, geometría y más.</p>
-        </div>
-        <div class="materia">
-            <h3>Ciencias</h3>
-            <p>Explora temas de biología, química y física.</p>
-        </div>
-        <div class="materia">
-            <h3>Historia</h3>
-            <p>Descubre la historia del mundo y sus eventos más importantes.</p>
-        </div>
-    </section>
+  <section id="materias">
+    <h2>Materias</h2>
+    <div class="materia">
+      <h3>Matemáticas</h3>
+      <p>Recursos y publicaciones sobre álgebra, cálculo, geometría y más.</p>
+    </div>
+    <div class="materia">
+      <h3>Ciencias</h3>
+      <p>Explora temas de biología, química y física.</p>
+    </div>
+    <div class="materia">
+      <h3>Historia</h3>
+      <p>Descubre la historia del mundo y sus eventos más importantes.</p>
+    </div>
+  </section>
 
-    <section id="publicaciones">
-        <h2>Publica tu contenido</h2>
-        <form id="formPublicacion">
-            <input type="text" id="titulo" placeholder="Título" required>
-            <textarea id="contenido" placeholder="Escribe tu publicación aquí..." required></textarea>
-            <button type="submit">Publicar</button>
-        </form>
-        <div id="listaPublicaciones"></div>
-    </section>
+  <section id="publicaciones">
+    <h2>Publica tu contenido</h2>
+    <form id="formPublicacion">
+      <input type="text" id="titulo" placeholder="Título" required />
+      <textarea id="contenido" placeholder="Escribe tu publicación aquí..." required></textarea>
+      <button type="submit">Publicar</button>
+    </form>
+    <div id="listaPublicaciones"></div>
+  </section>
 
-    <section id="comentarios">
-        <h2>Comentarios</h2>
-        <form id="formComentario">
-            <input type="text" id="nombre" placeholder="Tu nombre" required>
-            <textarea id="comentario" placeholder="Escribe tu comentario aquí..." required></textarea>
-            <button type="submit">Comentar</button>
-        </form>
-        <div id="listaComentarios"></div>
-    </section>
+  <section id="comentarios">
+    <h2>Comentarios</h2>
+    <form id="formComentario">
+      <input type="text" id="nombre" placeholder="Tu nombre" required />
+      <textarea id="comentario" placeholder="Escribe tu comentario aquí..." required></textarea>
+      <button type="submit">Comentar</button>
+    </form>
+    <div id="listaComentarios"></div>
+  </section>
 
-    <footer>
-        <p>&copy; 2025 EduConnect - Comunidad de Aprendizaje</p>
-    </footer>
-<script type="module">
-  // Firebase v9+ modular import
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
-  import { getFirestore, collection, addDoc, getDocs } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
+  <footer>
+    <p>&copy; 2025 EduConnect - Comunidad de Aprendizaje</p>
+  </footer>
 
-  // 🚨 Reemplaza esto con tu configuración de Firebase
-  const firebaseConfig = {
-    apiKey: "TU_API_KEY",
-    authDomain: "educonnect-a492f.firebaseapp.com",
-    projectId: "educonnect-a492f",
-    storageBucket: "educonnect-a492f.appspot.com",
-    messagingSenderId: "XXXXXXXXXXX",
-    appId: "1:XXXXXXXXXXX:web:XXXXXXXXXXX"
-  };
+  <!-- Firebase App + Firestore -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.8.0/firebase-app.js";
+    import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.8.0/firebase-analytics.js";
+    import { getFirestore, collection, addDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.8.0/firebase-firestore.js";
 
-  const app = initializeApp(firebaseConfig);
-  const db = getFirestore(app);
+    // Configuración de Firebase
+    const firebaseConfig = {
+      apiKey: "AIzaSyBBOQ3Juovb9-m8HCLghqF5DlR5LgBMYY0",
+      authDomain: "educonnect-a492f.firebaseapp.com",
+      projectId: "educonnect-a492f",
+      storageBucket: "educonnect-a492f.firebasestorage.app",
+      messagingSenderId: "1086853453106",
+      appId: "1:1086853453106:web:51262a98664e59724fb32b",
+      measurementId: "G-VQQS2PFRXB"
+    };
 
-  const publicacionesRef = collection(db, "publicaciones");
-  const comentariosRef = collection(db, "comentarios");
+    const app = initializeApp(firebaseConfig);
+    const analytics = getAnalytics(app);
+    const db = getFirestore(app);
 
-  // Publicar contenido
-  document.getElementById("formPublicacion").addEventListener("submit", async function (e) {
-    e.preventDefault();
-    const titulo = document.getElementById("titulo").value;
-    const contenido = document.getElementById("contenido").value;
+    const formPublicacion = document.getElementById("formPublicacion");
+    const formComentario = document.getElementById("formComentario");
+    const listaPublicaciones = document.getElementById("listaPublicaciones");
+    const listaComentarios = document.getElementById("listaComentarios");
 
-    if (titulo && contenido) {
-      await addDoc(publicacionesRef, { titulo, contenido });
-      alert("¡Publicación guardada en la nube!");
-      location.reload();
-    }
-  });
+    // Cargar publicaciones
+    onSnapshot(collection(db, "publicaciones"), (snapshot) => {
+      listaPublicaciones.innerHTML = "";
+      snapshot.forEach((doc) => {
+        const data = doc.data();
+        let div = document.createElement("div");
+        div.innerHTML = `<h3>${data.titulo}</h3><p>${data.contenido}</p><hr>`;
+        listaPublicaciones.appendChild(div);
+      });
+    });
 
-  // Mostrar publicaciones
-  const listaPublicaciones = document.getElementById("listaPublicaciones");
-  const publicacionesSnap = await getDocs(publicacionesRef);
-  publicacionesSnap.forEach((doc) => {
-    const pub = doc.data();
-    let div = document.createElement("div");
-    div.innerHTML = `<h3>${pub.titulo}</h3><p>${pub.contenido}</p><hr>`;
-    listaPublicaciones.appendChild(div);
-  });
+    // Cargar comentarios
+    onSnapshot(collection(db, "comentarios"), (snapshot) => {
+      listaComentarios.innerHTML = "";
+      snapshot.forEach((doc) => {
+        const data = doc.data();
+        let div = document.createElement("div");
+        div.innerHTML = `<strong>${data.nombre}:</strong> <p>${data.comentario}</p><hr>`;
+        listaComentarios.appendChild(div);
+      });
+    });
 
-  // Comentar
-  document.getElementById("formComentario").addEventListener("submit", async function (e) {
-    e.preventDefault();
-    const nombre = document.getElementById("nombre").value;
-    const comentario = document.getElementById("comentario").value;
+    // Guardar nueva publicación
+    formPublicacion.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const titulo = document.getElementById("titulo").value;
+      const contenido = document.getElementById("contenido").value;
+      if (titulo && contenido) {
+        await addDoc(collection(db, "publicaciones"), { titulo, contenido });
+        formPublicacion.reset();
+      }
+    });
 
-    if (nombre && comentario) {
-      await addDoc(comentariosRef, { nombre, comentario });
-      alert("¡Comentario enviado!");
-      location.reload();
-    }
-  });
-
-  // Mostrar comentarios
-  const listaComentarios = document.getElementById("listaComentarios");
-  const comentariosSnap = await getDocs(comentariosRef);
-  comentariosSnap.forEach((doc) => {
-    const com = doc.data();
-    let div = document.createElement("div");
-    div.innerHTML = `<strong>${com.nombre}:</strong> <p>${com.comentario}</p><hr>`;
-    listaComentarios.appendChild(div);
-  });
-</script>
+    // Guardar nuevo comentario
+    formComentario.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const nombre = document.getElementById("nombre").value;
+      const comentario = document.getElementById("comentario").value;
+      if (nombre && comentario) {
+        await addDoc(collection(db, "comentarios"), { nombre, comentario });
+        formComentario.reset();
+      }
+    });
+  </script>
 </body>
 </html>
