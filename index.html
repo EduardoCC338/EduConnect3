@@ -5,6 +5,29 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EduConnect - Comunidad de Aprendizaje</title>
     <style>
+        <script type="module">
+  // Import the functions you need from the SDKs you need
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/11.8.0/firebase-app.js";
+  import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.8.0/firebase-analytics.js";
+  // TODO: Add SDKs for Firebase products that you want to use
+  // https://firebase.google.com/docs/web/setup#available-libraries
+
+  // Your web app's Firebase configuration
+  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+  const firebaseConfig = {
+    apiKey: "AIzaSyBBOQ3Juovb9-m8HCLghqF5DlR5LgBMYY0",
+    authDomain: "educonnect-a492f.firebaseapp.com",
+    projectId: "educonnect-a492f",
+    storageBucket: "educonnect-a492f.firebasestorage.app",
+    messagingSenderId: "1086853453106",
+    appId: "1:1086853453106:web:51262a98664e59724fb32b",
+    measurementId: "G-VQQS2PFRXB"
+  };
+
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+  const analytics = getAnalytics(app);
+</script>
         body {
             font-family: Arial, sans-serif;
             margin: 0;
