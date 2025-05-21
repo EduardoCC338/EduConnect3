@@ -5,72 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>EduConnect - Comunidad de Aprendizaje</title>
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 0;
-      padding: 0;
-      background-color: #f4f4f4;
-    }
-    header {
-      background: #0073e6;
-      color: white;
-      padding: 20px;
-      text-align: center;
-    }
-    nav {
-      background: #005bb5;
-      padding: 10px;
-      text-align: center;
-    }
-    nav ul {
-      list-style: none;
-      padding: 0;
-    }
-    nav ul li {
-      display: inline;
-      margin: 0 15px;
-    }
-    nav ul li a {
-      color: white;
-      text-decoration: none;
-      font-weight: bold;
-    }
-    section {
-      padding: 20px;
-      background: white;
-      margin: 20px;
-      border-radius: 10px;
-    }
-    .materia {
-      background: #ddd;
-      padding: 10px;
-      margin: 10px 0;
-      border-radius: 5px;
-    }
-    form {
-      display: flex;
-      flex-direction: column;
-    }
-    input, textarea, button {
-      margin: 10px 0;
-      padding: 10px;
-      width: 100%;
-    }
-    button {
-      background: #0073e6;
-      color: white;
-      border: none;
-      cursor: pointer;
-    }
-    button:hover {
-      background: #005bb5;
-    }
-    footer {
-      text-align: center;
-      padding: 10px;
-      background: #333;
-      color: white;
-    }
+    /* ... TU ESTILO SE MANTIENE IGUAL ... */
   </style>
 </head>
 <body>
@@ -133,74 +68,77 @@
     <p>&copy; 2025 EduConnect - Comunidad de Aprendizaje</p>
   </footer>
 
-  <!-- Firebase App + Firestore -->
+  <!-- Firebase -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.8.0/firebase-app.js";
-    import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.8.0/firebase-analytics.js";
-    import { getFirestore, collection, addDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.8.0/firebase-firestore.js";
+    import { getDatabase, ref, push, onValue } from "https://www.gstatic.com/firebasejs/11.8.0/firebase-database.js";
 
-    // Configuración de Firebase
     const firebaseConfig = {
       apiKey: "AIzaSyBBOQ3Juovb9-m8HCLghqF5DlR5LgBMYY0",
       authDomain: "educonnect-a492f.firebaseapp.com",
+      databaseURL: "https://educonnect-a492f-default-rtdb.firebaseio.com", // ✔️ OBLIGATORIO para usar Realtime Database
       projectId: "educonnect-a492f",
-      storageBucket: "educonnect-a492f.firebasestorage.app",
+      storageBucket: "educonnect-a492f.appspot.com",
       messagingSenderId: "1086853453106",
       appId: "1:1086853453106:web:51262a98664e59724fb32b",
       measurementId: "G-VQQS2PFRXB"
     };
 
     const app = initializeApp(firebaseConfig);
-    const analytics = getAnalytics(app);
-    const db = getFirestore(app);
+    const database = getDatabase(app);
 
+    // Referencias
+    const publicacionesRef = ref(database, "publicaciones");
+    const comentariosRef = ref(database, "comentarios");
+
+    // Publicar nueva publicación
     const formPublicacion = document.getElementById("formPublicacion");
-    const formComentario = document.getElementById("formComentario");
-    const listaPublicaciones = document.getElementById("listaPublicaciones");
-    const listaComentarios = document.getElementById("listaComentarios");
-
-    // Cargar publicaciones
-    onSnapshot(collection(db, "publicaciones"), (snapshot) => {
-      listaPublicaciones.innerHTML = "";
-      snapshot.forEach((doc) => {
-        const data = doc.data();
-        let div = document.createElement("div");
-        div.innerHTML = `<h3>${data.titulo}</h3><p>${data.contenido}</p><hr>`;
-        listaPublicaciones.appendChild(div);
-      });
-    });
-
-    // Cargar comentarios
-    onSnapshot(collection(db, "comentarios"), (snapshot) => {
-      listaComentarios.innerHTML = "";
-      snapshot.forEach((doc) => {
-        const data = doc.data();
-        let div = document.createElement("div");
-        div.innerHTML = `<strong>${data.nombre}:</strong> <p>${data.comentario}</p><hr>`;
-        listaComentarios.appendChild(div);
-      });
-    });
-
-    // Guardar nueva publicación
     formPublicacion.addEventListener("submit", async (e) => {
       e.preventDefault();
       const titulo = document.getElementById("titulo").value;
       const contenido = document.getElementById("contenido").value;
+
       if (titulo && contenido) {
-        await addDoc(collection(db, "publicaciones"), { titulo, contenido });
+        await push(publicacionesRef, { titulo, contenido });
         formPublicacion.reset();
       }
     });
 
-    // Guardar nuevo comentario
+    // Comentar
+    const formComentario = document.getElementById("formComentario");
     formComentario.addEventListener("submit", async (e) => {
       e.preventDefault();
       const nombre = document.getElementById("nombre").value;
       const comentario = document.getElementById("comentario").value;
+
       if (nombre && comentario) {
-        await addDoc(collection(db, "comentarios"), { nombre, comentario });
+        await push(comentariosRef, { nombre, comentario });
         formComentario.reset();
       }
+    });
+
+    // Mostrar publicaciones
+    const listaPublicaciones = document.getElementById("listaPublicaciones");
+    onValue(publicacionesRef, (snapshot) => {
+      listaPublicaciones.innerHTML = "";
+      snapshot.forEach((childSnapshot) => {
+        const { titulo, contenido } = childSnapshot.val();
+        const div = document.createElement("div");
+        div.innerHTML = `<h3>${titulo}</h3><p>${contenido}</p><hr>`;
+        listaPublicaciones.appendChild(div);
+      });
+    });
+
+    // Mostrar comentarios
+    const listaComentarios = document.getElementById("listaComentarios");
+    onValue(comentariosRef, (snapshot) => {
+      listaComentarios.innerHTML = "";
+      snapshot.forEach((childSnapshot) => {
+        const { nombre, comentario } = childSnapshot.val();
+        const div = document.createElement("div");
+        div.innerHTML = `<strong>${nombre}:</strong> <p>${comentario}</p><hr>`;
+        listaComentarios.appendChild(div);
+      });
     });
   </script>
 </body>
