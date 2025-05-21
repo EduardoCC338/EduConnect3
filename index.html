@@ -167,74 +167,72 @@
     <footer>
         <p>&copy; 2025 EduConnect - Comunidad de Aprendizaje</p>
     </footer>
+<script type="module">
+  // Firebase v9+ modular import
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
+  import { getFirestore, collection, addDoc, getDocs } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
 
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            const listaPublicaciones = document.getElementById("listaPublicaciones");
-            const listaComentarios = document.getElementById("listaComentarios");
+  // 🚨 Reemplaza esto con tu configuración de Firebase
+  const firebaseConfig = {
+    apiKey: "TU_API_KEY",
+    authDomain: "educonnect-a492f.firebaseapp.com",
+    projectId: "educonnect-a492f",
+    storageBucket: "educonnect-a492f.appspot.com",
+    messagingSenderId: "XXXXXXXXXXX",
+    appId: "1:XXXXXXXXXXX:web:XXXXXXXXXXX"
+  };
 
-            // Cargar datos guardados
-            function cargarDatos() {
-                const publicaciones = JSON.parse(localStorage.getItem("publicaciones")) || [];
-                const comentarios = JSON.parse(localStorage.getItem("comentarios")) || [];
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
 
-                publicaciones.forEach(pub => {
-                    let div = document.createElement("div");
-                    div.innerHTML = `<h3>${pub.titulo}</h3><p>${pub.contenido}</p><hr>`;
-                    listaPublicaciones.appendChild(div);
-                });
+  const publicacionesRef = collection(db, "publicaciones");
+  const comentariosRef = collection(db, "comentarios");
 
-                comentarios.forEach(com => {
-                    let div = document.createElement("div");
-                    div.innerHTML = `<strong>${com.nombre}:</strong> <p>${com.comentario}</p><hr>`;
-                    listaComentarios.appendChild(div);
-                });
-            }
+  // Publicar contenido
+  document.getElementById("formPublicacion").addEventListener("submit", async function (e) {
+    e.preventDefault();
+    const titulo = document.getElementById("titulo").value;
+    const contenido = document.getElementById("contenido").value;
 
-            cargarDatos();
+    if (titulo && contenido) {
+      await addDoc(publicacionesRef, { titulo, contenido });
+      alert("¡Publicación guardada en la nube!");
+      location.reload();
+    }
+  });
 
-            // Guardar publicación
-            document.getElementById("formPublicacion").addEventListener("submit", function (e) {
-                e.preventDefault();
-                let titulo = document.getElementById("titulo").value;
-                let contenido = document.getElementById("contenido").value;
+  // Mostrar publicaciones
+  const listaPublicaciones = document.getElementById("listaPublicaciones");
+  const publicacionesSnap = await getDocs(publicacionesRef);
+  publicacionesSnap.forEach((doc) => {
+    const pub = doc.data();
+    let div = document.createElement("div");
+    div.innerHTML = `<h3>${pub.titulo}</h3><p>${pub.contenido}</p><hr>`;
+    listaPublicaciones.appendChild(div);
+  });
 
-                if (titulo && contenido) {
-                    let nuevaPublicacion = { titulo, contenido };
-                    let publicaciones = JSON.parse(localStorage.getItem("publicaciones")) || [];
-                    publicaciones.push(nuevaPublicacion);
-                    localStorage.setItem("publicaciones", JSON.stringify(publicaciones));
+  // Comentar
+  document.getElementById("formComentario").addEventListener("submit", async function (e) {
+    e.preventDefault();
+    const nombre = document.getElementById("nombre").value;
+    const comentario = document.getElementById("comentario").value;
 
-                    let div = document.createElement("div");
-                    div.innerHTML = `<h3>${titulo}</h3><p>${contenido}</p><hr>`;
-                    listaPublicaciones.appendChild(div);
+    if (nombre && comentario) {
+      await addDoc(comentariosRef, { nombre, comentario });
+      alert("¡Comentario enviado!");
+      location.reload();
+    }
+  });
 
-                    document.getElementById("titulo").value = "";
-                    document.getElementById("contenido").value = "";
-                }
-            });
-
-            // Guardar comentario
-            document.getElementById("formComentario").addEventListener("submit", function (e) {
-                e.preventDefault();
-                let nombre = document.getElementById("nombre").value;
-                let comentario = document.getElementById("comentario").value;
-
-                if (nombre && comentario) {
-                    let nuevoComentario = { nombre, comentario };
-                    let comentarios = JSON.parse(localStorage.getItem("comentarios")) || [];
-                    comentarios.push(nuevoComentario);
-                    localStorage.setItem("comentarios", JSON.stringify(comentarios));
-
-                    let div = document.createElement("div");
-                    div.innerHTML = `<strong>${nombre}:</strong> <p>${comentario}</p><hr>`;
-                    listaComentarios.appendChild(div);
-
-                    document.getElementById("nombre").value = "";
-                    document.getElementById("comentario").value = "";
-                }
-            });
-        });
-    </script>
+  // Mostrar comentarios
+  const listaComentarios = document.getElementById("listaComentarios");
+  const comentariosSnap = await getDocs(comentariosRef);
+  comentariosSnap.forEach((doc) => {
+    const com = doc.data();
+    let div = document.createElement("div");
+    div.innerHTML = `<strong>${com.nombre}:</strong> <p>${com.comentario}</p><hr>`;
+    listaComentarios.appendChild(div);
+  });
+</script>
 </body>
 </html>
