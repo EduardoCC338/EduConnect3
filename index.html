@@ -1,26 +1,27 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>EduConnect - Comunidad de Aprendizaje</title>
   <style>
+    /* Estilos generales */
     body {
       font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
       margin: 0;
       padding: 0;
-      background-color: #f4f4f4;
     }
 
     header {
-      background: #0073e6;
+      background-color: #0073e6;
       color: white;
       padding: 20px;
       text-align: center;
     }
 
     nav {
-      background: #005bb5;
+      background-color: #005bb5;
       padding: 10px;
       text-align: center;
     }
@@ -43,13 +44,13 @@
 
     section {
       padding: 20px;
-      background: white;
+      background-color: white;
       margin: 20px;
       border-radius: 10px;
     }
 
     .materia {
-      background: #ddd;
+      background-color: #ddd;
       padding: 10px;
       margin: 10px 0;
       border-radius: 5px;
@@ -67,21 +68,47 @@
     }
 
     button {
-      background: #0073e6;
+      background-color: #0073e6;
       color: white;
       border: none;
       cursor: pointer;
     }
 
     button:hover {
-      background: #005bb5;
+      background-color: #005bb5;
     }
 
     footer {
       text-align: center;
       padding: 10px;
-      background: #333;
+      background-color: #333;
       color: white;
+    }
+
+    .publicacion, .comentario {
+      border: 1px solid #ccc;
+      padding: 10px;
+      margin-bottom: 10px;
+      border-radius: 5px;
+    }
+
+    .publicacion img {
+      max-width: 100%;
+      height: auto;
+      margin-top: 10px;
+    }
+
+    details summary {
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    .acciones {
+      margin-top: 10px;
+    }
+
+    .acciones button {
+      margin-right: 5px;
     }
   </style>
 </head>
@@ -107,18 +134,18 @@
 
   <section id="materias">
     <h2>Materias</h2>
-    <div class="materia">
-      <h3>Matemáticas</h3>
-      <p>Recursos y publicaciones sobre álgebra, cálculo, geometría y más.</p>
-    </div>
-    <div class="materia">
-      <h3>Ciencias</h3>
-      <p>Explora temas de biología, química y física.</p>
-    </div>
-    <div class="materia">
-      <h3>Historia</h3>
-      <p>Descubre la historia del mundo y sus eventos más importantes.</p>
-    </div>
+    <details>
+      <summary>Matemáticas</summary>
+      <p>Explora conceptos de álgebra, cálculo, geometría y más. Comparte problemas y soluciones.</p>
+    </details>
+    <details>
+      <summary>Ciencias</summary>
+      <p>Comparte experimentos, teorías y descubrimientos en biología, química y física.</p>
+    </details>
+    <details>
+      <summary>Historia</summary>
+      <p>Discute eventos históricos, civilizaciones antiguas y análisis de contextos históricos.</p>
+    </details>
   </section>
 
   <section id="publicaciones">
@@ -126,6 +153,7 @@
     <form id="formPublicacion">
       <input type="text" id="titulo" placeholder="Título" required>
       <textarea id="contenido" placeholder="Escribe tu publicación aquí..." required></textarea>
+      <input type="file" id="imagen">
       <button type="submit">Publicar</button>
     </form>
     <div id="listaPublicaciones"></div>
@@ -147,7 +175,8 @@
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.8.0/firebase-app.js";
-    import { getDatabase, ref, push, onValue } from "https://www.gstatic.com/firebasejs/11.8.0/firebase-database.js";
+    import { getDatabase, ref, push, onValue, remove, update, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.8.0/firebase-database.js";
+    import { getStorage, ref as storageRef, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/11.8.0/firebase-storage.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyBBOQ3Juovb9-m8HCLghqF5DlR5LgBMYY0",
@@ -161,6 +190,7 @@
 
     const app = initializeApp(firebaseConfig);
     const db = getDatabase(app);
+    const storage = getStorage(app);
 
     const formPublicacion = document.getElementById("formPublicacion");
     const formComentario = document.getElementById("formComentario");
@@ -168,12 +198,26 @@
     const listaComentarios = document.getElementById("listaComentarios");
 
     // Guardar publicación
-    formPublicacion.addEventListener("submit", function (e) {
+    formPublicacion.addEventListener("submit", async function (e) {
       e.preventDefault();
       const titulo = document.getElementById("titulo").value;
       const contenido = document.getElementById("contenido").value;
+      const imagenFile = document.getElementById("imagen").files[0];
+
+      let imagenURL = "";
+      if (imagenFile) {
+        const imgRef = storageRef(storage, 'imagenes/' + imagenFile.name);
+        await uploadBytes(imgRef, imagenFile);
+        imagenURL = await getDownloadURL(imgRef);
+      }
+
       if (titulo && contenido) {
-        push(ref(db, "publicaciones/"), { titulo, contenido });
+        push(ref(db, "publicaciones/"), {
+          titulo,
+          contenido,
+          imagenURL,
+          timestamp: serverTimestamp()
+        });
         formPublicacion.reset();
       }
     });
@@ -184,7 +228,11 @@
       const nombre = document.getElementById("nombre").value;
       const comentario = document.getElementById("comentario").value;
       if (nombre && comentario) {
-        push(ref(db, "comentarios/"), { nombre, comentario });
+        push(ref(db, "comentarios/"), {
+          nombre,
+          comentario,
+          timestamp: serverTimestamp()
+        });
         formComentario.reset();
       }
     });
@@ -194,8 +242,20 @@
       listaPublicaciones.innerHTML = "";
       snapshot.forEach((child) => {
         const data = child.val();
+        const key = child.key;
+        const fecha = data.timestamp ? new Date(data.timestamp).toLocaleString() : "Fecha no disponible";
         const div = document.createElement("div");
-        div.innerHTML = `<h3>${data.titulo}</h3><p>${data.contenido}</p><hr>`;
+        div.classList.add("publicacion");
+        div.innerHTML = `
+          <h3>${data.titulo}</h3>
+          <p>${data.contenido}</p>
+          ${data.imagenURL ? `<img src="${data.imagenURL}" alt="Imagen de la publicación">` : ""}
+          <p><em>Publicado el: ${fecha}</em></p>
+          <div class="acciones">
+            <button onclick="editarPublicacion('${key}', '${data.titulo}', '${data.contenido}')">Editar</button>
+            <button onclick="eliminarPublicacion('${key}')">Eliminar</button>
+          </div>
+        `;
         listaPublicaciones.appendChild(div);
       });
     });
@@ -205,11 +265,28 @@
       listaComentarios.innerHTML = "";
       snapshot.forEach((child) => {
         const data = child.val();
+        const key = child.key;
+        const fecha = data.timestamp ? new Date(data.timestamp).toLocaleString() : "Fecha no disponible";
         const div = document.createElement("div");
-        div.innerHTML = `<strong>${data.nombre}:</strong> <p>${data.comentario}</p><hr>`;
+        div.classList.add("comentario");
+        div.innerHTML = `
+          <strong>${data.nombre}:</strong>
+          <p>${data.comentario}</p>
+          <p><em>Comentado el: ${fecha}</em></p>
+          <div class="acciones">
+            <button onclick="editarComentario('${key}', '${data.nombre}', '${data.comentario}')">Editar</button>
+            <button onclick="eliminarComentario('${key}')">Eliminar</button>
+          </div>
+        `;
         listaComentarios.appendChild(div);
       });
     });
-  </script>
-</body>
-</html>
+
+    // Funciones para editar y eliminar publicaciones
+    window.editarPublicacion = function (key, titulo, contenido) {
+      const nuevoTitulo = prompt("Editar título:", titulo);
+      const nuevoContenido = prompt("Editar contenido:", contenido);
+      if (nuevoTitulo !== null && nuevoContenido !== null) {
+        update(ref(db, `publicaciones/${key}`), {
+          titulo: nuevoTitulo,
+          contenido: nuevoContenido
