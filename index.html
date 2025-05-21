@@ -1,198 +1,283 @@
+Claro, aquí tienes el código completo actualizado, que:
+	•	Usa Firebase Realtime Database con la URL correcta.
+	•	Permite guardar, mostrar, editar y eliminar publicaciones y comentarios.
+	•	Permite subir imágenes en las publicaciones.
+	•	Muestra fecha y hora de cada publicación y comentario.
+	•	Incluye sección de materias con texto expandible/cerrable.
+	•	Tiene una interfaz mejorada y funcional.
+
+⸻
+
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>EduConnect</title>
-  <style>
-    body { font-family: Arial, sans-serif; background-color: #f0f0f0; margin: 0; }
-    header, nav, footer { background-color: #0073e6; color: white; text-align: center; padding: 10px; }
-    nav ul { list-style: none; padding: 0; display: flex; justify-content: center; gap: 20px; }
-    nav ul li a { color: white; text-decoration: none; font-weight: bold; }
-    section { background: white; margin: 20px; padding: 20px; border-radius: 8px; }
-    .materia-content { display: none; margin-top: 10px; }
-    .materia h3 { cursor: pointer; background-color: #eee; padding: 10px; border-radius: 4px; }
-    form { display: flex; flex-direction: column; gap: 10px; }
-    input, textarea, button { padding: 10px; border-radius: 5px; border: 1px solid #ccc; }
-    button { background-color: #0073e6; color: white; border: none; cursor: pointer; }
-    button:hover { background-color: #005bb5; }
-    .item { border-bottom: 1px solid #ddd; padding: 10px 0; }
-    .item img { max-width: 200px; display: block; margin-top: 10px; }
-    .item button { margin-right: 10px; }
-  </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>EduConnect - Comunidad de Aprendizaje</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    margin: 0; padding: 0;
+    background-color: #f4f4f4;
+  }
+  header {
+    background: #0073e6; color: white;
+    padding: 20px; text-align: center;
+  }
+  nav {
+    background: #005bb5;
+    padding: 10px; text-align: center;
+  }
+  nav ul {
+    list-style: none; padding: 0; margin: 0;
+  }
+  nav ul li {
+    display: inline; margin: 0 15px;
+  }
+  nav ul li a {
+    color: white; font-weight: bold; text-decoration: none;
+  }
+  section {
+    background: white;
+    margin: 20px auto;
+    padding: 20px;
+    max-width: 900px;
+    border-radius: 10px;
+    box-shadow: 0 0 8px rgba(0,0,0,0.1);
+  }
+  .materia {
+    background: #ddd;
+    margin-bottom: 10px;
+    border-radius: 6px;
+  }
+  .materia > h3 {
+    margin: 0;
+    padding: 10px;
+    cursor: pointer;
+    user-select: none;
+  }
+  .materia .contenido-materia {
+    padding: 0 10px 10px 10px;
+    display: none;
+    font-size: 0.95em;
+    line-height: 1.3em;
+  }
+  form {
+    display: flex; flex-direction: column;
+  }
+  input, textarea, button {
+    margin: 8px 0; padding: 10px;
+    font-size: 1em;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    resize: vertical;
+  }
+  button {
+    background: #0073e6;
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
+  }
+  button:hover {
+    background: #005bb5;
+  }
+  .publicacion, .comentario {
+    border-bottom: 1px solid #ccc;
+    padding: 12px 0;
+    position: relative;
+  }
+  .publicacion img {
+    max-width: 100%;
+    max-height: 200px;
+    margin-top: 8px;
+    border-radius: 6px;
+  }
+  .fecha {
+    font-size: 0.8em;
+    color: #666;
+    margin-top: 4px;
+  }
+  .btn-editar, .btn-eliminar {
+    cursor: pointer;
+    background: #0073e6;
+    border: none;
+    color: white;
+    font-size: 0.8em;
+    padding: 4px 8px;
+    border-radius: 4px;
+    margin-left: 6px;
+  }
+  .btn-eliminar {
+    background: #d9534f;
+  }
+  .btn-editar:hover {
+    background: #005bb5;
+  }
+  .btn-eliminar:hover {
+    background: #c9302c;
+  }
+  .acciones {
+    position: absolute;
+    top: 10px;
+    right: 0;
+  }
+  #imagenPublicacion {
+    padding: 3px;
+  }
+</style>
 </head>
 <body>
 
-  <header>
-    <h1>EduConnect</h1>
-    <p>Una comunidad educativa para estudiantes de primaria hasta universidad</p>
-  </header>
+<header>
+  <h1>EduConnect</h1>
+  <p>Una comunidad educativa para estudiantes de primaria hasta universidad</p>
+</header>
 
-  <nav>
-    <ul>
-      <li><a href="#materias">Materias</a></li>
-      <li><a href="#publicaciones">Publicaciones</a></li>
-      <li><a href="#comentarios">Comentarios</a></li>
-    </ul>
-  </nav>
+<nav>
+  <ul>
+    <li><a href="#inicio">Inicio</a></li>
+    <li><a href="#materias">Materias</a></li>
+    <li><a href="#publicaciones">Publicaciones</a></li>
+    <li><a href="#comentarios">Comentarios</a></li>
+  </ul>
+</nav>
 
-  <section id="materias">
-    <h2>Materias</h2>
-    <div class="materia">
-      <h3 onclick="toggle('matematicas')">Matemáticas</h3>
-      <div id="matematicas" class="materia-content">
-        <p>Explora el mundo de los números: álgebra, cálculo, estadística y geometría aplicada. Aprende a resolver problemas del día a día con lógica matemática.</p>
-      </div>
+<section id="inicio">
+  <h2>Bienvenidos a EduConnect</h2>
+  <p>Un espacio para compartir conocimientos y colaborar en distintas materias.</p>
+</section>
+
+<section id="materias">
+  <h2>Materias</h2>
+  
+  <div class="materia">
+    <h3>Matemáticas</h3>
+    <div class="contenido-materia">
+      <p>Las matemáticas son fundamentales para desarrollar el pensamiento lógico y resolver problemas. Desde álgebra y cálculo hasta geometría, esta materia nos ayuda a comprender patrones y relaciones en el mundo.</p>
     </div>
-    <div class="materia">
-      <h3 onclick="toggle('ciencias')">Ciencias</h3>
-      <div id="ciencias" class="materia-content">
-        <p>Descubre la biología, la química y la física. Desde los organismos vivos hasta las leyes del universo, explora la ciencia con experimentos y explicaciones claras.</p>
-      </div>
+  </div>
+
+  <div class="materia">
+    <h3>Ciencias</h3>
+    <div class="contenido-materia">
+      <p>La ciencia nos permite explorar el universo y entender la naturaleza. Biología, química y física nos ofrecen herramientas para estudiar la vida, la materia y las fuerzas que gobiernan el mundo.</p>
     </div>
-    <div class="materia">
-      <h3 onclick="toggle('historia')">Historia</h3>
-      <div id="historia" class="materia-content">
-        <p>Viaja en el tiempo y conoce las civilizaciones antiguas, las revoluciones que cambiaron el mundo y los personajes que marcaron épocas.</p>
-      </div>
+  </div>
+
+  <div class="materia">
+    <h3>Historia</h3>
+    <div class="contenido-materia">
+      <p>La historia nos conecta con nuestro pasado y nos enseña las lecciones de generaciones anteriores. Conocer los eventos históricos nos ayuda a entender la sociedad y su evolución.</p>
     </div>
-  </section>
+  </div>
+</section>
 
-  <section id="publicaciones">
-    <h2>Publica tu contenido</h2>
-    <form id="formPublicacion">
-      <input type="text" id="titulo" placeholder="Título" required />
-      <textarea id="contenido" placeholder="Contenido..." required></textarea>
-      <input type="file" id="imagen" accept="image/*" />
-      <button type="submit">Publicar</button>
-    </form>
-    <div id="listaPublicaciones"></div>
-  </section>
+<section id="publicaciones">
+  <h2>Publica tu contenido</h2>
+  <form id="formPublicacion">
+    <input type="text" id="titulo" placeholder="Título" required />
+    <textarea id="contenido" placeholder="Escribe tu publicación aquí..." required></textarea>
+    <input type="file" id="imagenPublicacion" accept="image/*" />
+    <button type="submit">Publicar</button>
+  </form>
+  <div id="listaPublicaciones"></div>
+</section>
 
-  <section id="comentarios">
-    <h2>Comentarios</h2>
-    <form id="formComentario">
-      <input type="text" id="nombre" placeholder="Tu nombre" required />
-      <textarea id="comentario" placeholder="Escribe tu comentario..." required></textarea>
-      <button type="submit">Comentar</button>
-    </form>
-    <div id="listaComentarios"></div>
-  </section>
+<section id="comentarios">
+  <h2>Comentarios</h2>
+  <form id="formComentario">
+    <input type="text" id="nombre" placeholder="Tu nombre" required />
+    <textarea id="comentario" placeholder="Escribe tu comentario aquí..." required></textarea>
+    <button type="submit">Comentar</button>
+  </form>
+  <div id="listaComentarios"></div>
+</section>
 
-  <footer>
-    <p>&copy; 2025 EduConnect</p>
-  </footer>
+<footer>
+  <p>&copy; 2025 EduConnect - Comunidad de Aprendizaje</p>
+</footer>
 
-  <!-- Firebase -->
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.8.0/firebase-app.js";
-    import { getDatabase, ref, push, onValue, remove, update } from "https://www.gstatic.com/firebasejs/11.8.0/firebase-database.js";
-    import { getStorage, ref as sRef, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/11.8.0/firebase-storage.js";
+<script type="module">
+// Importa Firebase y funciones necesarias
+import { initializeApp } from "https://www.gstatic.com/firebasejs/11.8.0/firebase-app.js";
+import { getDatabase, ref, push, onValue, remove, update } from "https://www.gstatic.com/firebasejs/11.8.0/firebase-database.js";
+import { getStorage, ref as sRef, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/11.8.0/firebase-storage.js";
 
-    const firebaseConfig = {
-      apiKey: "AIzaSyBBOQ3Juovb9-m8HCLghqF5DlR5LgBMYY0",
-      authDomain: "educonnect-a492f.firebaseapp.com",
-      databaseURL: "https://educonnect-a492f-default-rtdb.firebaseio.com",
-      projectId: "educonnect-a492f",
-      storageBucket: "educonnect-a492f.appspot.com",
-      messagingSenderId: "1086853453106",
-      appId: "1:1086853453106:web:51262a98664e59724fb32b"
-    };
+const firebaseConfig = {
+  apiKey: "AIzaSyBBOQ3Juovb9-m8HCLghqF5DlR5LgBMYY0",
+  authDomain: "educonnect-a492f.firebaseapp.com",
+  databaseURL: "https://educonnect-a492f-default-rtdb.firebaseio.com",
+  projectId: "educonnect-a492f",
+  storageBucket: "educonnect-a492f.appspot.com",
+  messagingSenderId: "1086853453106",
+  appId: "1:1086853453106:web:51262a98664e59724fb32b",
+  measurementId: "G-VQQS2PFRXB"
+};
 
-    const app = initializeApp(firebaseConfig);
-    const db = getDatabase(app);
-    const storage = getStorage(app);
+// Inicializa Firebase
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+const storage = getStorage(app);
 
-    const formPub = document.getElementById("formPublicacion");
-    const listaPub = document.getElementById("listaPublicaciones");
-    const formCom = document.getElementById("formComentario");
-    const listaCom = document.getElementById("listaComentarios");
+// --- Helpers ---
 
-    function mostrarHora(fecha) {
-      return new Date(fecha).toLocaleString();
-    }
+function formatearFecha(timestamp) {
+  const date = new Date(timestamp);
+  return date.toLocaleString("es-ES", { dateStyle: "short", timeStyle: "short" });
+}
 
-    formPub.addEventListener("submit", async e => {
-      e.preventDefault();
-      const titulo = document.getElementById("titulo").value;
-      const contenido = document.getElementById("contenido").value;
-      const archivo = document.getElementById("imagen").files[0];
-      const fecha = Date.now();
+function crearElementoPublicacion(id, data) {
+  const div = document.createElement("div");
+  div.classList.add("publicacion");
+  div.dataset.id = id;
 
-      let imageUrl = "";
+  const fechaTexto = formatearFecha(data.fecha);
 
-      if (archivo) {
-        const imgRef = sRef(storage, 'imagenes/' + archivo.name + "_" + fecha);
-        await uploadBytes(imgRef, archivo);
-        imageUrl = await getDownloadURL(imgRef);
-      }
+  div.innerHTML = `
+    <h3 contenteditable="false" class="titulo">${data.titulo}</h3>
+    <p contenteditable="false" class="contenido">${data.contenido}</p>
+    ${data.imagen ? `<img src="${data.imagen}" alt="Imagen publicación" />` : ""}
+    <div class="fecha">Publicado: ${fechaTexto}</div>
+    <div class="acciones">
+      <button class="btn-editar">Editar</button>
+      <button class="btn-eliminar">Eliminar</button>
+    </div>
+  `;
+  return div;
+}
 
-      await push(ref(db, "publicaciones"), {
-        titulo,
-        contenido,
-        imagen: imageUrl,
-        fecha
-      });
+function crearElementoComentario(id, data) {
+  const div = document.createElement("div");
+  div.classList.add("comentario");
+  div.dataset.id = id;
 
-      formPub.reset();
-    });
+  const fechaTexto = formatearFecha(data.fecha);
 
-    formCom.addEventListener("submit", async e => {
-      e.preventDefault();
-      const nombre = document.getElementById("nombre").value;
-      const comentario = document.getElementById("comentario").value;
-      const fecha = Date.now();
+  div.innerHTML = `
+    <strong contenteditable="false" class="nombre">${data.nombre}</strong>:
+    <p contenteditable="false" class="comentario-texto">${data.comentario}</p>
+    <div class="fecha">Comentado: ${fechaTexto}</div>
+    <div class="acciones">
+      <button class="btn-editar">Editar</button>
+      <button class="btn-eliminar">Eliminar</button>
+    </div>
+  `;
+  return div;
+}
 
-      await push(ref(db, "comentarios"), { nombre, comentario, fecha });
+// --- Variables de DOM ---
+const listaPublicaciones = document.getElementById("listaPublicaciones");
+const listaComentarios = document.getElementById("listaComentarios");
+const formPublicacion = document.getElementById("formPublicacion");
+const formComentario = document.getElementById("formComentario");
+const inputImagen = document.getElementById("imagenPublicacion");
 
-      formCom.reset();
-    });
+// --- Funciones de carga y renderizado ---
 
-    function crearElemento(clave, datos, tipo) {
-      const div = document.createElement("div");
-      div.className = "item";
-
-      let contenido = tipo === "publicacion"
-        ? `<h3>${datos.titulo}</h3><p>${datos.contenido}</p>`
-        : `<strong>${datos.nombre}:</strong><p>${datos.comentario}</p>`;
-
-      if (datos.imagen) contenido += `<img src="${datos.imagen}" alt="imagen"/>`;
-      contenido += `<small>${mostrarHora(datos.fecha)}</small><br>`;
-
-      const eliminarBtn = document.createElement("button");
-      eliminarBtn.textContent = "Eliminar";
-      eliminarBtn.onclick = () => remove(ref(db, `${tipo === "publicacion" ? "publicaciones" : "comentarios"}/${clave}`));
-
-      const editarBtn = document.createElement("button");
-      editarBtn.textContent = "Editar";
-      editarBtn.onclick = () => {
-        const nuevoTexto = prompt("Edita tu contenido:", tipo === "publicacion" ? datos.contenido : datos.comentario);
-        if (nuevoTexto) {
-          const actualizacion = tipo === "publicacion" ? { contenido: nuevoTexto } : { comentario: nuevoTexto };
-          update(ref(db, `${tipo === "publicacion" ? "publicaciones" : "comentarios"}/${clave}`), actualizacion);
-        }
-      };
-
-      div.innerHTML = contenido;
-      div.appendChild(editarBtn);
-      div.appendChild(eliminarBtn);
-      return div;
-    }
-
-    onValue(ref(db, "publicaciones"), snap => {
-      listaPub.innerHTML = "";
-      snap.forEach(child => listaPub.appendChild(crearElemento(child.key, child.val(), "publicacion")));
-    });
-
-    onValue(ref(db, "comentarios"), snap => {
-      listaCom.innerHTML = "";
-      snap.forEach(child => listaCom.appendChild(crearElemento(child.key, child.val(), "comentario")));
-    });
-
-    window.toggle = id => {
-      const el = document.getElementById(id);
-      el.style.display = el.style.display === "block" ? "none" : "block";
-    };
-  </script>
-</body>
-</html>
+function cargarPublicaciones() {
+  const publicacionesRef = ref(db, "publicaciones");
+  onValue(publicacionesRef, (snapshot) => {
+    listaPublicaciones.innerHTML = "";
+    snapshot.for
