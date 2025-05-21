@@ -1,407 +1,198 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>EduConnect - Comunidad de Aprendizaje</title>
-<style>
-  body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-    background-color: #f4f4f4;
-  }
-  header {
-    background: #0073e6;
-    color: white;
-    padding: 20px;
-    text-align: center;
-  }
-  nav {
-    background: #005bb5;
-    padding: 10px;
-    text-align: center;
-  }
-  nav ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-  }
-  nav ul li {
-    display: inline-block;
-    margin: 0 15px;
-  }
-  nav ul li a {
-    color: white;
-    text-decoration: none;
-    font-weight: bold;
-    cursor: pointer;
-  }
-  section {
-    background: white;
-    margin: 20px;
-    padding: 20px;
-    border-radius: 10px;
-  }
-  .materia {
-    background: #ddd;
-    margin-bottom: 10px;
-    border-radius: 5px;
-  }
-  .materia h3 {
-    margin: 0;
-    padding: 10px;
-    background: #bbb;
-    cursor: pointer;
-    user-select: none;
-  }
-  .materia .contenido {
-    padding: 10px;
-    display: none;
-  }
-  form {
-    display: flex;
-    flex-direction: column;
-  }
-  input, textarea, button {
-    margin: 8px 0;
-    padding: 10px;
-    font-size: 1em;
-  }
-  button {
-    background: #0073e6;
-    color: white;
-    border: none;
-    cursor: pointer;
-    border-radius: 5px;
-  }
-  button:hover {
-    background: #005bb5;
-  }
-  .publicacion, .comentario {
-    border: 1px solid #ccc;
-    margin-bottom: 12px;
-    padding: 12px;
-    border-radius: 6px;
-    position: relative;
-    background: #fafafa;
-  }
-  .publicacion h3 {
-    margin: 0 0 6px 0;
-  }
-  .fecha {
-    font-size: 0.8em;
-    color: #666;
-    margin-bottom: 8px;
-  }
-  .acciones {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-  }
-  .acciones button {
-    background: transparent;
-    border: none;
-    color: #0073e6;
-    margin-left: 8px;
-    cursor: pointer;
-    font-weight: bold;
-  }
-  .acciones button:hover {
-    color: #005bb5;
-  }
-  img.archivo-img {
-    max-width: 100%;
-    max-height: 200px;
-    display: block;
-    margin-top: 8px;
-    border-radius: 6px;
-  }
-  input[type="file"] {
-    margin: 10px 0;
-  }
-  footer {
-    text-align: center;
-    padding: 10px;
-    background: #333;
-    color: white;
-    margin-top: 40px;
-  }
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>EduConnect</title>
+  <style>
+    body { font-family: Arial, sans-serif; background-color: #f0f0f0; margin: 0; }
+    header, nav, footer { background-color: #0073e6; color: white; text-align: center; padding: 10px; }
+    nav ul { list-style: none; padding: 0; display: flex; justify-content: center; gap: 20px; }
+    nav ul li a { color: white; text-decoration: none; font-weight: bold; }
+    section { background: white; margin: 20px; padding: 20px; border-radius: 8px; }
+    .materia-content { display: none; margin-top: 10px; }
+    .materia h3 { cursor: pointer; background-color: #eee; padding: 10px; border-radius: 4px; }
+    form { display: flex; flex-direction: column; gap: 10px; }
+    input, textarea, button { padding: 10px; border-radius: 5px; border: 1px solid #ccc; }
+    button { background-color: #0073e6; color: white; border: none; cursor: pointer; }
+    button:hover { background-color: #005bb5; }
+    .item { border-bottom: 1px solid #ddd; padding: 10px 0; }
+    .item img { max-width: 200px; display: block; margin-top: 10px; }
+    .item button { margin-right: 10px; }
+  </style>
 </head>
 <body>
 
-<header>
-  <h1>EduConnect</h1>
-  <p>Una comunidad educativa para estudiantes de primaria hasta universidad</p>
-</header>
+  <header>
+    <h1>EduConnect</h1>
+    <p>Una comunidad educativa para estudiantes de primaria hasta universidad</p>
+  </header>
 
-<nav>
-  <ul>
-    <li><a href="#inicio">Inicio</a></li>
-    <li><a href="#materias">Materias</a></li>
-    <li><a href="#publicaciones">Publicaciones</a></li>
-    <li><a href="#comentarios">Comentarios</a></li>
-  </ul>
-</nav>
+  <nav>
+    <ul>
+      <li><a href="#materias">Materias</a></li>
+      <li><a href="#publicaciones">Publicaciones</a></li>
+      <li><a href="#comentarios">Comentarios</a></li>
+    </ul>
+  </nav>
 
-<section id="inicio">
-  <h2>Bienvenidos a EduConnect</h2>
-  <p>Un espacio para compartir conocimientos y colaborar en distintas materias.</p>
-</section>
-
-<section id="materias">
-  <h2>Materias</h2>
-  
-  <div class="materia">
-    <h3>Matemáticas</h3>
-    <div class="contenido">
-      <p>En matemáticas exploramos temas como álgebra, geometría, cálculo y estadística, fundamentales para resolver problemas y entender patrones en la naturaleza y la ciencia.</p>
-      <p>Además, fomentamos el pensamiento lógico y analítico que es crucial para diversas áreas del conocimiento y la vida diaria.</p>
-    </div>
-  </div>
-
-  <div class="materia">
-    <h3>Ciencias</h3>
-    <div class="contenido">
-      <p>Las ciencias abarcan biología, química y física, que nos ayudan a comprender el mundo natural, desde las células hasta el universo.</p>
-      <p>Investigamos cómo funcionan los sistemas vivos, las reacciones químicas y las leyes físicas que rigen nuestro entorno.</p>
-    </div>
-  </div>
-
-  <div class="materia">
-    <h3>Historia</h3>
-    <div class="contenido">
-      <p>La historia nos permite conocer el pasado de la humanidad, sus civilizaciones, eventos importantes y cómo estos moldearon el mundo actual.</p>
-      <p>Estudiamos causas, consecuencias y contextos para entender mejor nuestra identidad y sociedad.</p>
-    </div>
-  </div>
-</section>
-
-<section id="publicaciones">
-  <h2>Publica tu contenido</h2>
-  <form id="formPublicacion">
-    <input type="text" id="titulo" placeholder="Título" required />
-    <textarea id="contenido" placeholder="Escribe tu publicación aquí..." required></textarea>
-    <input type="file" id="archivoPublicacion" accept="image/*,application/pdf" />
-    <button type="submit">Publicar</button>
-  </form>
-  <div id="listaPublicaciones"></div>
-</section>
-
-<section id="comentarios">
-  <h2>Comentarios</h2>
-  <form id="formComentario">
-    <input type="text" id="nombre" placeholder="Tu nombre" required />
-    <textarea id="comentario" placeholder="Escribe tu comentario aquí..." required></textarea>
-    <input type="file" id="archivoComentario" accept="image/*,application/pdf" />
-    <button type="submit">Comentar</button>
-  </form>
-  <div id="listaComentarios"></div>
-</section>
-
-<footer>
-  <p>&copy; 2025 EduConnect - Comunidad de Aprendizaje</p>
-</footer>
-
-<script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/11.8.0/firebase-app.js";
-  import { getDatabase, ref, push, onValue, update, remove } from "https://www.gstatic.com/firebasejs/11.8.0/firebase-database.js";
-  import { getStorage, ref as storageRef, uploadBytes, getDownloadURL, deleteObject } from "https://www.gstatic.com/firebasejs/11.8.0/firebase-storage.js";
-
-  const firebaseConfig = {
-    apiKey: "AIzaSyBBOQ3Juovb9-m8HCLghqF5DlR5LgBMYY0",
-    authDomain: "educonnect-a492f.firebaseapp.com",
-    databaseURL: "https://educonnect-a492f-default-rtdb.firebaseio.com",
-    projectId: "educonnect-a492f",
-    storageBucket: "educonnect-a492f.appspot.com",
-    messagingSenderId: "1086853453106",
-    appId: "1:1086853453106:web:51262a98664e59724fb32b",
-    measurementId: "G-VQQS2PFRXB"
-  };
-
-  const app = initializeApp(firebaseConfig);
-  const db = getDatabase(app);
-  const storage = getStorage(app);
-
-  // Referencias base
-  const publicacionesRef = ref(db, "publicaciones");
-  const comentariosRef = ref(db, "comentarios");
-
-  // Elementos DOM
-  const listaPublicaciones = document.getElementById("listaPublicaciones");
-  const listaComentarios = document.getElementById("listaComentarios");
-
-  // Función para formatear fecha/hora legible
-  function formatFecha(fechaISO) {
-    const fecha = new Date(fechaISO);
-    return fecha.toLocaleString("es-ES", {
-      dateStyle: "short",
-      timeStyle: "short",
-    });
-  }
-
-  // Mostrar contenido materias con toggle
-  document.querySelectorAll(".materia h3").forEach(h3 => {
-    h3.addEventListener("click", () => {
-      const contenido = h3.nextElementSibling;
-      if (contenido.style.display === "block") {
-        contenido.style.display = "none";
-      } else {
-        contenido.style.display = "block";
-      }
-    });
-  });
-
-  // --- FUNCIONES PUBLICACIONES ---
-
-  // Renderizar una publicación en el DOM
-  function renderPublicacion(id, data) {
-    const div = document.createElement("div");
-    div.className = "publicacion";
-    div.id = `pub-${id}`;
-
-    let archivoHTML = "";
-    if (data.archivoURL) {
-      if (data.archivoTipo.startsWith("image/")) {
-        archivoHTML = `<img src="${data.archivoURL}" alt="Imagen subida" class="archivo-img" />`;
-      } else {
-        archivoHTML = `<a href="${data.archivoURL}" target="_blank" rel="noopener">Archivo adjunto</a>`;
-      }
-    }
-
-    div.innerHTML = `
-      <div class="acciones">
-        <button onclick="editarPublicacion('${id}')">✏️</button>
-        <button onclick="eliminarPublicacion('${id}', '${data.archivoNombre || ""}')">🗑️</button>
+  <section id="materias">
+    <h2>Materias</h2>
+    <div class="materia">
+      <h3 onclick="toggle('matematicas')">Matemáticas</h3>
+      <div id="matematicas" class="materia-content">
+        <p>Explora el mundo de los números: álgebra, cálculo, estadística y geometría aplicada. Aprende a resolver problemas del día a día con lógica matemática.</p>
       </div>
-      <h3>${data.titulo}</h3>
-      <div class="fecha">${formatFecha(data.fecha)}</div>
-      <p>${data.contenido.replace(/\n/g, "<br>")}</p>
-      ${archivoHTML}
-    `;
-
-    return div;
-  }
-
-  // Escuchar cambios en publicaciones
-  onValue(publicacionesRef, (snapshot) => {
-    listaPublicaciones.innerHTML = "";
-    snapshot.forEach(childSnapshot => {
-      const id = childSnapshot.key;
-      const data = childSnapshot.val();
-      const pubDiv = renderPublicacion(id, data);
-      listaPublicaciones.appendChild(pubDiv);
-    });
-  });
-
-  // Subir archivo a Firebase Storage y devolver URL
-  async function subirArchivo(file) {
-    if (!file) return { url: null, tipo: null, nombre: null };
-    const nombreArchivo = `${Date.now()}_${file.name}`;
-    const archivoRef = storageRef(storage, nombreArchivo);
-    await uploadBytes(archivoRef, file);
-    const url = await getDownloadURL(archivoRef);
-    return { url, tipo: file.type, nombre: nombreArchivo };
-  }
-
-  // Manejar nuevo envío de publicación
-  document.getElementById("formPublicacion").addEventListener("submit", async (e) => {
-    e.preventDefault();
-    const titulo = document.getElementById("titulo").value.trim();
-    const contenido = document.getElementById("contenido").value.trim();
-    const archivoInput = document.getElementById("archivoPublicacion");
-    const archivo = archivoInput.files[0];
-
-    if (!titulo || !contenido) {
-      alert("Por favor, ingresa título y contenido.");
-      return;
-    }
-
-    // Subir archivo si hay
-    const archivoData = await subirArchivo(archivo);
-
-    // Guardar en DB
-    const nuevaPubRef = push(publicacionesRef);
-    await nuevaPubRef.set({
-      titulo,
-      contenido,
-      fecha: new Date().toISOString(),
-      archivoURL: archivoData.url || null,
-      archivoTipo: archivoData.tipo || null,
-      archivoNombre: archivoData.nombre || null,
-    });
-
-    // Reset form
-    e.target.reset();
-  });
-
-  // Editar publicación
-  window.editarPublicacion = async (id) => {
-    const pubRef = ref(db, `publicaciones/${id}`);
-    const snapshot = await onValue(pubRef, { onlyOnce: true });
-    const data = snapshot.val();
-
-    const nuevoTitulo = prompt("Editar título:", data.titulo);
-    if (nuevoTitulo === null) return; // cancelado
-
-    const nuevoContenido = prompt("Editar contenido:", data.contenido);
-    if (nuevoContenido === null) return; // cancelado
-
-    await update(pubRef, {
-      titulo: nuevoTitulo.trim(),
-      contenido: nuevoContenido.trim(),
-      fecha: new Date().toISOString()
-    });
-  };
-
-  // Eliminar publicación y archivo asociado si hay
-  window.eliminarPublicacion = async (id, archivoNombre) => {
-    if (!confirm("¿Seguro que quieres eliminar esta publicación?")) return;
-    const pubRef = ref(db, `publicaciones/${id}`);
-    await remove(pubRef);
-    if (archivoNombre) {
-      const archivoRef = storageRef(storage, archivoNombre);
-      try {
-        await deleteObject(archivoRef);
-      } catch {}
-    }
-  };
-
-  // --- FUNCIONES COMENTARIOS ---
-
-  // Renderizar comentario
-  function renderComentario(id, data) {
-    const div = document.createElement("div");
-    div.className = "comentario";
-    div.id = `com-${id}`;
-
-    let archivoHTML = "";
-    if (data.archivoURL) {
-      if (data.archivoTipo.startsWith("image/")) {
-        archivoHTML = `<img src="${data.archivoURL}" alt="Imagen subida" class="archivo-img" />`;
-      } else {
-        archivoHTML = `<a href="${data.archivoURL}" target="_blank" rel="noopener">Archivo adjunto</a>`;
-      }
-    }
-
-    div.innerHTML = `
-      <div class="acciones">
-        <button onclick="editarComentario('${id}')">✏️</button>
-        <button onclick="eliminarComentario('${id}', '${data.archivoNombre || ""}')">🗑️</button>
+    </div>
+    <div class="materia">
+      <h3 onclick="toggle('ciencias')">Ciencias</h3>
+      <div id="ciencias" class="materia-content">
+        <p>Descubre la biología, la química y la física. Desde los organismos vivos hasta las leyes del universo, explora la ciencia con experimentos y explicaciones claras.</p>
       </div>
-      <strong>${data.nombre}</strong> <span class="fecha">${formatFecha(data.fecha)}</span>
-      <p>${data.comentario.replace(/\n/g, "<br>")}</p>
-      ${archivoHTML}
-    `;
+    </div>
+    <div class="materia">
+      <h3 onclick="toggle('historia')">Historia</h3>
+      <div id="historia" class="materia-content">
+        <p>Viaja en el tiempo y conoce las civilizaciones antiguas, las revoluciones que cambiaron el mundo y los personajes que marcaron épocas.</p>
+      </div>
+    </div>
+  </section>
 
-    return div;
-  }
+  <section id="publicaciones">
+    <h2>Publica tu contenido</h2>
+    <form id="formPublicacion">
+      <input type="text" id="titulo" placeholder="Título" required />
+      <textarea id="contenido" placeholder="Contenido..." required></textarea>
+      <input type="file" id="imagen" accept="image/*" />
+      <button type="submit">Publicar</button>
+    </form>
+    <div id="listaPublicaciones"></div>
+  </section>
 
-  // Escuchar cambios en comentarios
-  onValue(comentariosRef, (snapshot) => {
-    listaComentarios.innerHTML = "";
-    snapshot.forEach(childSnapshot => {
-      const id = childSnapshot.key;
-      const data = childSnapshot.val();
-      const comDiv =
+  <section id="comentarios">
+    <h2>Comentarios</h2>
+    <form id="formComentario">
+      <input type="text" id="nombre" placeholder="Tu nombre" required />
+      <textarea id="comentario" placeholder="Escribe tu comentario..." required></textarea>
+      <button type="submit">Comentar</button>
+    </form>
+    <div id="listaComentarios"></div>
+  </section>
+
+  <footer>
+    <p>&copy; 2025 EduConnect</p>
+  </footer>
+
+  <!-- Firebase -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.8.0/firebase-app.js";
+    import { getDatabase, ref, push, onValue, remove, update } from "https://www.gstatic.com/firebasejs/11.8.0/firebase-database.js";
+    import { getStorage, ref as sRef, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/11.8.0/firebase-storage.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyBBOQ3Juovb9-m8HCLghqF5DlR5LgBMYY0",
+      authDomain: "educonnect-a492f.firebaseapp.com",
+      databaseURL: "https://educonnect-a492f-default-rtdb.firebaseio.com",
+      projectId: "educonnect-a492f",
+      storageBucket: "educonnect-a492f.appspot.com",
+      messagingSenderId: "1086853453106",
+      appId: "1:1086853453106:web:51262a98664e59724fb32b"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+    const storage = getStorage(app);
+
+    const formPub = document.getElementById("formPublicacion");
+    const listaPub = document.getElementById("listaPublicaciones");
+    const formCom = document.getElementById("formComentario");
+    const listaCom = document.getElementById("listaComentarios");
+
+    function mostrarHora(fecha) {
+      return new Date(fecha).toLocaleString();
+    }
+
+    formPub.addEventListener("submit", async e => {
+      e.preventDefault();
+      const titulo = document.getElementById("titulo").value;
+      const contenido = document.getElementById("contenido").value;
+      const archivo = document.getElementById("imagen").files[0];
+      const fecha = Date.now();
+
+      let imageUrl = "";
+
+      if (archivo) {
+        const imgRef = sRef(storage, 'imagenes/' + archivo.name + "_" + fecha);
+        await uploadBytes(imgRef, archivo);
+        imageUrl = await getDownloadURL(imgRef);
+      }
+
+      await push(ref(db, "publicaciones"), {
+        titulo,
+        contenido,
+        imagen: imageUrl,
+        fecha
+      });
+
+      formPub.reset();
+    });
+
+    formCom.addEventListener("submit", async e => {
+      e.preventDefault();
+      const nombre = document.getElementById("nombre").value;
+      const comentario = document.getElementById("comentario").value;
+      const fecha = Date.now();
+
+      await push(ref(db, "comentarios"), { nombre, comentario, fecha });
+
+      formCom.reset();
+    });
+
+    function crearElemento(clave, datos, tipo) {
+      const div = document.createElement("div");
+      div.className = "item";
+
+      let contenido = tipo === "publicacion"
+        ? `<h3>${datos.titulo}</h3><p>${datos.contenido}</p>`
+        : `<strong>${datos.nombre}:</strong><p>${datos.comentario}</p>`;
+
+      if (datos.imagen) contenido += `<img src="${datos.imagen}" alt="imagen"/>`;
+      contenido += `<small>${mostrarHora(datos.fecha)}</small><br>`;
+
+      const eliminarBtn = document.createElement("button");
+      eliminarBtn.textContent = "Eliminar";
+      eliminarBtn.onclick = () => remove(ref(db, `${tipo === "publicacion" ? "publicaciones" : "comentarios"}/${clave}`));
+
+      const editarBtn = document.createElement("button");
+      editarBtn.textContent = "Editar";
+      editarBtn.onclick = () => {
+        const nuevoTexto = prompt("Edita tu contenido:", tipo === "publicacion" ? datos.contenido : datos.comentario);
+        if (nuevoTexto) {
+          const actualizacion = tipo === "publicacion" ? { contenido: nuevoTexto } : { comentario: nuevoTexto };
+          update(ref(db, `${tipo === "publicacion" ? "publicaciones" : "comentarios"}/${clave}`), actualizacion);
+        }
+      };
+
+      div.innerHTML = contenido;
+      div.appendChild(editarBtn);
+      div.appendChild(eliminarBtn);
+      return div;
+    }
+
+    onValue(ref(db, "publicaciones"), snap => {
+      listaPub.innerHTML = "";
+      snap.forEach(child => listaPub.appendChild(crearElemento(child.key, child.val(), "publicacion")));
+    });
+
+    onValue(ref(db, "comentarios"), snap => {
+      listaCom.innerHTML = "";
+      snap.forEach(child => listaCom.appendChild(crearElemento(child.key, child.val(), "comentario")));
+    });
+
+    window.toggle = id => {
+      const el = document.getElementById(id);
+      el.style.display = el.style.display === "block" ? "none" : "block";
+    };
+  </script>
+</body>
+</html>
