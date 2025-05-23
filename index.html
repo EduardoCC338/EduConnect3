@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>EduConnect - Comunidad de Aprendizaje</title>
   <style>
     body { font-family: Arial, sans-serif; margin: 0; padding: 0; background-color: #f4f4f4; }
@@ -17,7 +17,6 @@
     input, textarea, button { margin: 10px 0; padding: 10px; width: 100%; }
     button { background: #0073e6; color: white; border: none; cursor: pointer; }
     button:hover { background: #005bb5; }
-    img { max-width: 200px; margin-top: 10px; border-radius: 5px; }
     footer { text-align: center; padding: 10px; background: #333; color: white; }
   </style>
 </head>
@@ -60,9 +59,8 @@
   <section id="publicaciones">
     <h2>Publica tu contenido</h2>
     <form id="formPublicacion">
-      <input type="text" id="titulo" placeholder="Título" required>
+      <input type="text" id="titulo" placeholder="Título" required />
       <textarea id="contenido" placeholder="Escribe tu publicación aquí..." required></textarea>
-      <input type="file" id="imagenPublicacion" accept="image/*">
       <button type="submit">Publicar</button>
     </form>
     <div id="listaPublicaciones"></div>
@@ -71,9 +69,8 @@
   <section id="comentarios">
     <h2>Comentarios</h2>
     <form id="formComentario">
-      <input type="text" id="nombre" placeholder="Tu nombre" required>
+      <input type="text" id="nombre" placeholder="Tu nombre" required />
       <textarea id="comentario" placeholder="Escribe tu comentario aquí..." required></textarea>
-      <input type="file" id="imagenComentario" accept="image/*">
       <button type="submit">Comentar</button>
     </form>
     <div id="listaComentarios"></div>
@@ -86,7 +83,6 @@
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.8.0/firebase-app.js";
     import { getDatabase, ref, push, onValue, update, remove } from "https://www.gstatic.com/firebasejs/11.8.0/firebase-database.js";
-    import { getStorage, ref as sRef, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/11.8.0/firebase-storage.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyBBOQ3Juovb9-m8HCLghqF5DlR5LgBMYY0",
@@ -100,44 +96,25 @@
 
     const app = initializeApp(firebaseConfig);
     const db = getDatabase(app);
-    const storage = getStorage(app);
 
     const formPublicacion = document.getElementById("formPublicacion");
     const formComentario = document.getElementById("formComentario");
     const listaPublicaciones = document.getElementById("listaPublicaciones");
     const listaComentarios = document.getElementById("listaComentarios");
 
-    formPublicacion.addEventListener("submit", async (e) => {
+    formPublicacion.addEventListener("submit", (e) => {
       e.preventDefault();
       const titulo = document.getElementById("titulo").value;
       const contenido = document.getElementById("contenido").value;
-      const imagen = document.getElementById("imagenPublicacion").files[0];
-      let urlImagen = "";
-
-      if (imagen) {
-        const imgRef = sRef(storage, `publicaciones/${Date.now()}_${imagen.name}`);
-        await uploadBytes(imgRef, imagen);
-        urlImagen = await getDownloadURL(imgRef);
-      }
-
-      push(ref(db, "publicaciones/"), { titulo, contenido, imagen: urlImagen });
+      push(ref(db, "publicaciones/"), { titulo, contenido });
       formPublicacion.reset();
     });
 
-    formComentario.addEventListener("submit", async (e) => {
+    formComentario.addEventListener("submit", (e) => {
       e.preventDefault();
       const nombre = document.getElementById("nombre").value;
       const comentario = document.getElementById("comentario").value;
-      const imagen = document.getElementById("imagenComentario").files[0];
-      let urlImagen = "";
-
-      if (imagen) {
-        const imgRef = sRef(storage, `comentarios/${Date.now()}_${imagen.name}`);
-        await uploadBytes(imgRef, imagen);
-        urlImagen = await getDownloadURL(imgRef);
-      }
-
-      push(ref(db, "comentarios/"), { nombre, comentario, imagen: urlImagen });
+      push(ref(db, "comentarios/"), { nombre, comentario });
       formComentario.reset();
     });
 
@@ -150,7 +127,6 @@
         div.innerHTML = `
           <h3>${data.titulo}</h3>
           <p>${data.contenido}</p>
-          ${data.imagen ? `<img src="${data.imagen}" alt="Imagen de publicación">` : ""}
           <button onclick="editarPublicacion('${key}')">Editar</button>
           <button onclick="eliminarPublicacion('${key}')">Eliminar</button>
           <hr>
@@ -168,7 +144,6 @@
         div.innerHTML = `
           <strong>${data.nombre}:</strong>
           <p>${data.comentario}</p>
-          ${data.imagen ? `<img src="${data.imagen}" alt="Imagen del comentario">` : ""}
           <button onclick="editarComentario('${key}')">Editar</button>
           <button onclick="eliminarComentario('${key}')">Eliminar</button>
           <hr>
@@ -177,8 +152,17 @@
       });
     });
 
-    window.eliminarPublicacion = (key) => remove(ref(db, `publicaciones/${key}`));
-    window.eliminarComentario = (key) => remove(ref(db, `comentarios/${key}`));
+    window.eliminarPublicacion = (key) => {
+      if (confirm("¿Seguro que quieres eliminar esta publicación?")) {
+        remove(ref(db, `publicaciones/${key}`));
+      }
+    };
+
+    window.eliminarComentario = (key) => {
+      if (confirm("¿Seguro que quieres eliminar este comentario?")) {
+        remove(ref(db, `comentarios/${key}`));
+      }
+    };
 
     window.editarPublicacion = (key) => {
       const nuevoTitulo = prompt("Nuevo título:");
